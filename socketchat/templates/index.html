@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+</head>
+<body style="padding: 20px;">
+<div class="container">
+    <a class="btn btn-primary" href="{% url 'logout' %}" style=" display: inline-block; float: right">Logout</a>
+    <h1>Welcome to ChatApp {{request.user.username}}</h1>
+    <div style="height: 30px"></div>
+    {% for user in users %}
+            <div class="card" style="border-radius: 20px">
+                <div class="card-header">
+                    <h3>Chat with {{ user }}</h3>
+                </div>
+                <div class="card-body">
+                    <div style="height: 200px; overflow: scroll">
+                        <ul id="{{ request.user.username }}{{ user }}"></ul>
+                    </div>
+
+                </div>
+            <div class="card-footer">
+                <form onsubmit="return false;">
+                           <input id="m{{ user }}" autocomplete="off" onclick="joinRoom('{{ request.user.username }}{{ user }}', {{ rooms }}, '{{ user }}', '{{ request.user.username }}')" /><button type="submit" onclick="myFunction('{{ request.user.username }}{{ user }}', {{ rooms }}, '{{ user }}', '{{ request.user.username }}', '#{{ request.user.username }}{{ user }}', '#m{{ user }}' ,'m{{ user }}')">Send</button>
+                    </form>
+            </div>
+            </div>
+        <div style="height: 70px"></div>
+    {% endfor %}
+</div>
+
+
+<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+
+<script>
+    var socket = io('http://localhost:3000/');
+
+    function joinRoom(room, rooms, user, current_user) {
+        if (rooms.includes(room)){
+        }
+        else {
+            room = user + current_user
+        }
+        socket.emit('joinRoom', room);
+
+    }
+
+    function myFunction(room, rooms, user, current_user, messg_id, input_id, input) {
+        if (rooms.includes(room)){
+            room = room
+        }
+        else {
+            room = user + current_user
+        }
+        data = {
+            "messg": $(input_id).val(),
+            "room": room,
+            "messg_id": messg_id,
+            "user": user,
+            "current_user": current_user
+        };
+        document.getElementById(input).value = '';
+        socket.emit('chat-message', data)
+    }
+
+    socket.on('chat-message', function (data) {
+        console.log(data);
+        messg_id = '#'+data.current_user+data.user;
+        $(messg_id).append($('<li>').text('You=> '+ data.messag));
+        messg_id = '#'+data.user+data.current_user;
+        $(messg_id).append($('<li>').text(data.current_user+'=> '+data.messag));
+
+        console.log(messg_id);
+
+
+    })
+</script>
+
+</body>
+</html>

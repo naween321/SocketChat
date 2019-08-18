@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <title>Add User</title>
+
+    <style>
+        *, *:before, *:after {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    color: #384047;
+  }
+
+  form {
+    max-width: 300px;
+    margin: 10px auto;
+    padding: 10px 20px;
+    background: #f4f7f8;
+    border-radius: 8px;
+  }
+
+  h1 {
+    margin: 0 0 30px 0;
+    text-align: center;
+  }
+
+  input[type="text"],
+  input[type="password"],
+  input[type="date"],
+  input[type="datetime"],
+  input[type="email"],
+  input[type="number"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="time"],
+  input[type="url"],
+  textarea,
+  select {
+    background: rgba(255,255,255,0.1);
+    border: none;
+    font-size: 16px;
+    height: auto;
+    margin: 0;
+    outline: 0;
+    padding: 8px;
+    width: 100%;
+    background-color: #e8eeef;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+    margin-bottom: 8px;
+    border-radius: 10px;
+  }
+
+  input[type="radio"],
+  input[type="checkbox"] {
+    margin: 0 4px 8px 0;
+  }
+
+  select {
+    padding: 6px;
+    height: 32px;
+    border-radius: 14px;
+  }
+
+  button {
+    padding: 10px;
+    color: #FFF;
+    background-color: #4bc970;
+    font-size: 14px;
+    text-align: center;
+    font-style: normal;
+    border-radius: 20px;
+    width: 22%;
+    border: 1px solid #3ac162;
+    margin-bottom: 10px;
+}
+
+
+  fieldset {
+    margin-bottom: 8px;
+    border: none;
+  }
+
+  legend {
+    font-size: 1.4em;
+    margin-bottom: 10px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  label.light {
+    font-weight: 300;
+    display: inline;
+  }
+
+
+
+  @media screen and (min-width: 480px) {
+
+    form {
+      max-width: 480px;
+    }
+
+  }
+
+.add-form{
+    position: relative;
+  box-shadow: 1px 2px 30px rgba(0, 0, 0, .5);
+
+  background: white;
+  border-radius: 25px;
+
+}
+
+    </style>
+</head>
+<body>
+<div style="height: 50px"></div>
+<form method="post" action="{% url 'add_user' %}" class = 'add-form'>
+    {% csrf_token %}
+  <h1>Add User</h1>
+    <p style="color: red; display: none; margin: 0; padding: 0" id="error-bar">Invalid Form. Fields can't be empty</p>
+  <fieldset>
+    <label for="name" style="display: inline-block">Username:</label>
+    <input type="text" id="name" name="username">
+    <label for="mail">Email:</label>
+    <input type="email" id="mail" name="email">
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password">
+
+  </fieldset>
+  <button type="submit" class="submit">Add User</button>
+</form>
+
+
+</body>
+</html>
